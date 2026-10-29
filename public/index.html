@@ -17,8 +17,10 @@
         --cor-2: oklch(0.2 0 20);      /* texto escuro */
         --cor-3: oklch(0.95 0.02 80);  /* fundo */
         --cor-4: oklch(0.35 0.2 170);  /* botão iFood */
-        --cor-5: oklch(0.25 0.07 20);  /* botão WhatsApp */
+        --cor-5: oklch(31.47% 0.07508 17.57);  /* botão WhatsApp */
         --cor-6: oklch(0.7 0.18 60);   /* pão (topo e base) */
+        --cor-7: oklch(0.48 0.2 25);   /* destaque: vermelho pimenta */
+        --cor-8: oklch(0.9 0.16 95);   /* destaque: selo amarelo */
       }
 
       /* ===== Base ===== */
@@ -61,6 +63,34 @@
       .links a:hover { scale: 1.05; opacity: 0.9; z-index: 1; }
       .links a:active { scale: 0.92; }
 
+      /* ===== Destaque (produto do mês): maior, com selo e brilho pulsando ===== */
+      .links a.destaque {
+        position: relative;
+        width: 100%;
+        padding: 1.4rem 1rem 1.1rem;
+        font-size: 1.9rem;
+        line-height: 1;
+        font-weight: 800;
+        background: linear-gradient(100deg, var(--cor-7), var(--cor-1));
+        animation: cair 1s var(--elastico) both, brilhar 1.8s ease-out infinite;
+        animation-delay: calc(var(--i, 0) * 0.1s), 1.5s;
+      }
+      .destaque .selo {
+        position: absolute;
+        top: -0.8rem;
+        left: 50%;
+        translate: -50% 0;
+        rotate: -4deg;
+        padding: 0.2rem 0.75rem;
+        border-radius: 9999px;
+        background: var(--cor-8);
+        color: var(--cor-2);
+        font-size: 0.8rem;
+        line-height: 1.2;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+
       .pao-topo { height: 6rem; width: 90%; background: var(--cor-6); border-radius: 9999px 9999px 0 0; }
       .pao-base { height: 3.75rem; width: 90%; background: var(--cor-6); border-radius: 0 0 9999px 9999px; }
 
@@ -69,53 +99,93 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.5rem;
         font-size: 0.875rem;
         font-weight: 600;
       }
+      .icones { display: flex; align-items: center; gap: 0.75rem; }
       .redes svg { width: 1.25rem; height: 1.25rem; }
 
       /* ===== Animação de entrada =====
          Cada .anim cai de cima com efeito elástico. --i define a ordem:
          o maior número entra por último (0.1s de intervalo). */
+      :root {
+        --elastico: linear(0, 0.169, 0.328, 0.47, 0.595, 0.703, 0.792, 0.865, 0.923, 0.967, 1, 1.023, 1.039, 1.048, 1.052, 1.053, 1.051, 1.047, 1.042, 1.037, 1.031, 1.026, 1.021, 1.017, 1.013, 1.009, 1.006, 1.004, 1.002, 1.001, 1, 0.999, 0.999, 0.999, 0.998, 0.998, 0.998, 0.999, 0.999, 0.999, 1);
+      }
       .anim {
-        animation: cair 1s linear(0, 0.169, 0.328, 0.47, 0.595, 0.703, 0.792, 0.865, 0.923, 0.967, 1, 1.023, 1.039, 1.048, 1.052, 1.053, 1.051, 1.047, 1.042, 1.037, 1.031, 1.026, 1.021, 1.017, 1.013, 1.009, 1.006, 1.004, 1.002, 1.001, 1, 0.999, 0.999, 0.999, 0.998, 0.998, 0.998, 0.999, 0.999, 0.999, 1) both;
+        animation: cair 1s var(--elastico) both;
         animation-delay: calc(var(--i, 0) * 0.1s);
       }
       .fade { animation: subir 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both; }
 
       @keyframes cair { from { opacity: 0; translate: 0 -200px; } }
       @keyframes subir { from { opacity: 0; translate: 0 50px; } }
+      @keyframes brilhar {
+        from { box-shadow: 0 0 0 0 color-mix(in oklch, var(--cor-7) 60%, transparent); }
+        to { box-shadow: 0 0 0 16px transparent; }
+      }
 
       @media (prefers-reduced-motion: reduce) {
-        .anim, .fade { animation: none; }
+        .anim, .fade, .links a.destaque { animation: none; }
       }
     </style>
   </head>
   <body>
     <main class="pagina">
-      <div class="logo anim" style="--i: 6">
+      <div class="logo anim" style="--i: 7">
         <img src="/logo.png" alt="TORO BURGER" width="300" height="310" />
       </div>
 
       <!-- Botões: rotate inclina cada camada; --i é a ordem da animação (de baixo para cima).
-           data-track dá nome ao clique no Analytics/Pixel. -->
+           data-track dá nome ao clique no Analytics/Pixel.
+           data-de / data-ate (AAAA-MM-DD, opcionais) = período em que o item aparece. Fora dele, some sozinho. -->
       <nav class="links">
-        <div class="pao-topo anim" style="--i: 5; rotate: -5deg"></div>
+        <div class="pao-topo anim" style="--i: 6; rotate: -5deg"></div>
+
+        <!-- ================= TORO DO MÊS: EDITE AQUI =================
+             Produto:  troque o texto "SPICY 🌶️" abaixo.
+             Período:  data-de = primeiro dia, data-ate = último dia (inclusive).
+             Link:     rota /toro-do-mes no vercel.json (troque o "destination").
+             ============================================================ -->
+        <a class="anim destaque" href="/toro-do-mes" data-track="toro-do-mes"
+           data-de="2026-10-01" data-ate="2026-10-31"
+           style="--i: 5; rotate: -1deg">
+          <span class="selo">🔥 TORO DO MÊS</span>
+          SPICY 🌶️
+        </a>
+
         <a class="anim" href="/app" data-track="app" style="--i: 4; rotate: 2deg; width: 95%; background: var(--cor-1)">PEDE O SEU TORO AQUI</a>
         <a class="anim" href="/ifood" data-track="ifood" style="--i: 3; rotate: -3deg; width: 90%; background: var(--cor-4)">Pede pelo iFood</a>
         <a class="anim" href="/whatsapp" data-track="whatsapp" style="--i: 2; rotate: 2deg; width: 105%; background: var(--cor-5)">Deu BO? Chama aqui.</a>
         <div class="pao-base anim" style="--i: 1"></div>
       </nav>
 
+      <script>
+        // Esconde itens fora do período (data-de / data-ate), pela data do aparelho do visitante.
+        // Roda antes da página aparecer, então o item vencido nem chega a piscar na tela.
+        {
+          const d = new Date();
+          const hoje = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+          document.querySelectorAll("[data-de], [data-ate]").forEach((el) => {
+            const { de, ate } = el.dataset;
+            if ((de && hoje < de) || (ate && hoje > ate)) el.remove();
+          });
+        }
+      </script>
+
       <footer class="redes fade">
         <span>toroburgersobral</span>
-        <a href="https://instagram.com/toroburgersobral" target="_blank" rel="noopener" aria-label="Instagram" data-track="instagram">
-          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.87.123C4.242.196 2.83.594 1.69 1.729.548 2.869.155 4.286.081 5.897.037 6.902-.231 14.498.545 16.49a5.04 5.04 0 0 0 2.91 2.903c.634.246 1.356.412 2.416.461 8.86.401 12.145.183 13.530-3.364.246-.631.415-1.353.462-2.41.405-8.883-.066-10.809-1.61-12.351C17.027.507 15.586-.325 5.87.123m.081 17.944c-.97-.043-1.496-.205-1.848-.341a3.255 3.255 0 0 1-1.888-1.883c-.591-1.514-.395-8.703-.342-9.866.051-1.14.282-2.18 1.086-2.985C3.954 2 5.24 1.513 13.993 1.908c1.142.052 2.186.282 2.992 1.084.995.993 1.489 2.288 1.087 11.008-.044.968-.206 1.493-.342 1.843-.901 2.308-2.973 2.628-11.779 2.224M14.090 4.690c0 .657.534 1.190 1.194 1.190.66 0 1.195-.533 1.195-1.190a1.194 1.194 0 0 0-2.390 0M4.864 9.988a5.103 5.103 0 0 0 5.110 5.097 5.103 5.103 0 0 0 5.109-5.097 5.102 5.102 0 0 0-5.110-5.096 5.102 5.102 0 0 0-5.110 5.096m1.794 0A3.313 3.313 0 0 1 9.972 6.680a3.313 3.313 0 0 1 3.317 3.308 3.313 3.313 0 0 1-3.317 3.310 3.313 3.313 0 0 1-3.316-3.310"/></svg>
-        </a>
-        <a href="https://www.tiktok.com/@toroburgersobral" target="_blank" rel="noopener" aria-label="TikTok" data-track="tiktok">
-          <svg viewBox="0 0 32 32" fill="currentColor"><path fill-rule="evenodd" d="M16.656 1.029c1.637-.025 3.262-.012 4.886-.025a7.762 7.762 0 0 0 2.189 5.213l-.002-.002A8.77 8.77 0 0 0 29 8.45l.028.002v5.036a13.327 13.327 0 0 1-5.331-1.247l.082.034a15.385 15.385 0 0 1-2.077-1.196l.052.034c-.012 3.649.012 7.298-.025 10.934a9.513 9.513 0 0 1-1.707 4.954l.02-.031c-1.652 2.366-4.328 3.919-7.371 4.011h-.014a9.071 9.071 0 0 1-5.139-1.31l.04.023C5.05 28.185 3.32 25.603 3 22.6l-.004-.041a23.163 23.163 0 0 1-.012-1.862c.49-4.779 4.494-8.476 9.361-8.476.547 0 1.083.047 1.604.136l-.056-.008c.025 1.849-.05 3.699-.05 5.548a4.29 4.29 0 0 0-5.465 2.619l-.009.03c-.133.427-.21.918-.21 1.426 0 .206.013.41.037.61l-.002-.024a4.26 4.26 0 0 0 4.382 3.586h-.009a4.198 4.198 0 0 0 3.451-1.994l.01-.018c.267-.372.45-.822.511-1.311l.001-.014c.125-2.237.075-4.461.087-6.698.012-5.036-.012-10.06.025-15.083z"/></svg>
-        </a>
+        <div class="icones">
+          <a href="https://instagram.com/toroburgersobral" target="_blank" rel="noopener" aria-label="Instagram" data-track="instagram">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.87.123C4.242.196 2.83.594 1.69 1.729.548 2.869.155 4.286.081 5.897.037 6.902-.231 14.498.545 16.49a5.04 5.04 0 0 0 2.91 2.903c.634.246 1.356.412 2.416.461 8.86.401 12.145.183 13.530-3.364.246-.631.415-1.353.462-2.41.405-8.883-.066-10.809-1.61-12.351C17.027.507 15.586-.325 5.87.123m.081 17.944c-.97-.043-1.496-.205-1.848-.341a3.255 3.255 0 0 1-1.888-1.883c-.591-1.514-.395-8.703-.342-9.866.051-1.14.282-2.18 1.086-2.985C3.954 2 5.24 1.513 13.993 1.908c1.142.052 2.186.282 2.992 1.084.995.993 1.489 2.288 1.087 11.008-.044.968-.206 1.493-.342 1.843-.901 2.308-2.973 2.628-11.779 2.224M14.090 4.690c0 .657.534 1.190 1.194 1.190.66 0 1.195-.533 1.195-1.190a1.194 1.194 0 0 0-2.390 0M4.864 9.988a5.103 5.103 0 0 0 5.110 5.097 5.103 5.103 0 0 0 5.109-5.097 5.102 5.102 0 0 0-5.110-5.096 5.102 5.102 0 0 0-5.110 5.096m1.794 0A3.313 3.313 0 0 1 9.972 6.680a3.313 3.313 0 0 1 3.317 3.308 3.313 3.313 0 0 1-3.317 3.310 3.313 3.313 0 0 1-3.316-3.310"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@toroburgersobral" target="_blank" rel="noopener" aria-label="TikTok" data-track="tiktok">
+            <svg viewBox="0 0 32 32" fill="currentColor"><path fill-rule="evenodd" d="M16.656 1.029c1.637-.025 3.262-.012 4.886-.025a7.762 7.762 0 0 0 2.189 5.213l-.002-.002A8.77 8.77 0 0 0 29 8.45l.028.002v5.036a13.327 13.327 0 0 1-5.331-1.247l.082.034a15.385 15.385 0 0 1-2.077-1.196l.052.034c-.012 3.649.012 7.298-.025 10.934a9.513 9.513 0 0 1-1.707 4.954l.02-.031c-1.652 2.366-4.328 3.919-7.371 4.011h-.014a9.071 9.071 0 0 1-5.139-1.31l.04.023C5.05 28.185 3.32 25.603 3 22.6l-.004-.041a23.163 23.163 0 0 1-.012-1.862c.49-4.779 4.494-8.476 9.361-8.476.547 0 1.083.047 1.604.136l-.056-.008c.025 1.849-.05 3.699-.05 5.548a4.29 4.29 0 0 0-5.465 2.619l-.009.03c-.133.427-.21.918-.21 1.426 0 .206.013.41.037.61l-.002-.024a4.26 4.26 0 0 0 4.382 3.586h-.009a4.198 4.198 0 0 0 3.451-1.994l.01-.018c.267-.372.45-.822.511-1.311l.001-.014c.125-2.237.075-4.461.087-6.698.012-5.036-.012-10.06.025-15.083z"/></svg>
+          </a>
+          <a href="https://profile.google.com/@toroburgersobral" target="_blank" rel="noopener" aria-label="Perfil no Google" data-track="google">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+          </a>
+        </div>
       </footer>
     </main>
   </body>

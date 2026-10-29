@@ -17,6 +17,16 @@ modelos/rota-rastreada.html  modelo de rota com rastreamento (não é publicado)
 ROTAS.md                   registro de todas as rotas e onde cada uma fica
 ```
 
+## Toro do Mês (item em destaque com validade)
+
+Tudo fica em `public/index.html`, no bloco marcado `TORO DO MÊS: EDITE AQUI`:
+
+- **Produto**: o texto do botão.
+- **Período**: `data-de` e `data-ate` (formato `AAAA-MM-DD`, o último dia conta). Fora do período, o botão some sozinho; não precisa apagar nada.
+- **Link**: o `destination` da rota `/toro-do-mes` no `vercel.json`.
+
+Os atributos `data-de` e `data-ate` funcionam em qualquer item da página (botão, ícone etc.), não só no destaque. A data usada é a do celular de quem acessa.
+
 ## Rastreamento
 
 Abra `public/tracking.js` e preencha:

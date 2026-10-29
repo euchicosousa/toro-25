@@ -4,6 +4,7 @@
   "outputDirectory": "public",
   "cleanUrls": true,
   "redirects": [
+    { "source": "/toro-do-mes", "destination": "https://app.cardapioweb.com/toro_burger?id=5334929#produto", "permanent": false },
     { "source": "/app", "destination": "https://app.cardapioweb.com/toro_burger", "permanent": false },
     { "source": "/ifood", "destination": "https://www.ifood.com.br/delivery/sobral-ce/toro-burger-centro", "permanent": false },
     { "source": "/whatsapp", "destination": "https://wa.me/5588993425341", "permanent": false },

@@ -10,6 +10,7 @@ Uma rota fica em **um lugar só**. Se ela estiver nos dois, o `vercel.json` ganh
 | Rota        | Destino                                                         | Onde fica     | Rastreada |
 | ----------- | --------------------------------------------------------------- | ------------- | --------- |
 | `/`         | Página principal (`public/index.html`)                          | arquivo       | sim*      |
+| `/toro-do-mes` | https://app.cardapioweb.com/toro_burger?id=5334929#produto (SPICY, até 31/10) | `vercel.json` | não |
 | `/app`      | https://app.cardapioweb.com/toro_burger                         | `vercel.json` | não       |
 | `/ifood`    | https://www.ifood.com.br/delivery/sobral-ce/toro-burger-centro  | `vercel.json` | não       |
 | `/whatsapp` | https://wa.me/5588993425341                                     | `vercel.json` | não       |
