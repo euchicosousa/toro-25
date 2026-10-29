@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/app", "destination": "https://app.cardapioweb.com/toro_burger", "permanent": false },
+    { "source": "/ifood", "destination": "https://www.ifood.com.br/delivery/sobral-ce/toro-burger-centro", "permanent": false },
+    { "source": "/whatsapp", "destination": "https://wa.me/5588993425341", "permanent": false },
+    { "source": "/review", "destination": "https://g.page/r/CQOHGpiNmYiyEBM/review", "permanent": false },
+    { "source": "/cardapio", "destination": "/cardapio-toro.pdf", "permanent": false }
+  ]
+}
